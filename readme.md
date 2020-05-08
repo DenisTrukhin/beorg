@@ -15,5 +15,5 @@ python server.py /path/to/folder
 
 **Запуск клиента**
 ```
-python client.py <broker_address>
+python client.py <rabbitmq_address>
 ```
