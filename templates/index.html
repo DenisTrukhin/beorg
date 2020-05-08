@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Beorg test</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+	<link href="/static/css/all.css" rel="stylesheet">
+	<style>
+		
+	</style>
+</head>
+<body>
+	<div class="container" style="margin-top: 100px">
+		<div class="row">
+			<div class="col">
+				<nav class="navbar navbar-expand-lg navbar-light bg-light">
+					<h3 id="path-to-cat">&lt;path to catalog&gt;</h3>
+				</nav>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col" id="folders"></div>
+		</div>
+		<div class="row">
+			<div class="col" id="files"></div>
+		</div>
+
+	</div>
+	
+	<div style="display: none">
+		<div class="row" id="folder">
+			<div class="col">
+				<i class="fas fa-folder-open"></i>
+				<span></span>
+			</div>
+		</div>
+		<div class="row" id="file">
+			<div class="col">
+				<i class="fas fa-file"></i>
+				<span></span>
+			</div>
+		</div>
+	</div>
+</body>
+<script src="https://code.jquery.com/jquery-3.0.0.js"></script>
+<script>
+	function fill_content(catalog) {
+		catalog = JSON.parse(catalog);
+		// console.log(catalog);
+
+		$('#path-to-cat')[0].innerText = catalog.path;
+		$('#folders').empty();
+		$('#files').empty();
+		for (i in catalog.folders) {
+			var folder = $('#folder').clone();
+			folder[0].children[0].children[1].innerText = catalog.folders[i];
+			folder.appendTo('#folders');
+		}
+		for (i in catalog.files) {
+			var file = $('#file').clone();
+			file[0].children[0].children[1].innerText = catalog.files[i];
+			file.appendTo('#files');
+		}
+	}
+
+	window.setInterval( function() {
+		$.ajax({
+			type: 'POST',
+			url: '/update',
+			success: fill_content,
+			error: function(response) {
+				console.log(response);
+			}
+	})
+	}, 1000);
+</script>
+</html>
